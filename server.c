@@ -4,7 +4,7 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 
-#define PORT 5000
+#define PORT 6969
 #define BUFFER_SIZE 1024
 
 void *handle_client(void *arg) {
@@ -14,15 +14,15 @@ void *handle_client(void *arg) {
   while (true) {
     ssize_t n = recv(client_fd, buffer, sizeof(buffer), 0);
     if (n <= 0) break;
-    printf("recv -> message = %s", buffer);
+    printf("recv -> message = %s\n", buffer);
     send(client_fd, buffer, n, 0);
   }
   close(client_fd);
 }
 
 int main() {
-  int server_fd, opt;
-  struct sockaddr_in server_addr;
+  int server_fd;
+  int opt = 1;
   if((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
     perror("failed to create socket!\n");
     exit(EXIT_FAILURE);
@@ -30,7 +30,8 @@ int main() {
   if(
     setsockopt(
       server_fd,
-      SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+      SOL_SOCKET,
+      SO_REUSEADDR | SO_REUSEPORT,
       &opt,
       sizeof(opt)
     ) < 0
@@ -38,6 +39,7 @@ int main() {
     perror("failed to set socket options!\n");
     exit(EXIT_FAILURE);
   }
+  struct sockaddr_in server_addr;
   server_addr.sin_family = AF_INET;
   server_addr.sin_addr.s_addr = INADDR_ANY;
   server_addr.sin_port = htons(PORT);
@@ -60,7 +62,12 @@ int main() {
     struct sockaddr_in client_addr;
     socklen_t len = sizeof(client_addr);
     int *client_fd = malloc(sizeof(int));
-    *client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &len);
+    if(
+      *client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &len) < 0
+    ) {
+      perror("cound't accept connection request!");
+      continue;
+    };
     pthread_t tid;
     pthread_create(&tid, NULL, &handle_client, client_fd);
     pthread_detach(tid);

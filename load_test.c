@@ -8,7 +8,7 @@
 #define BUFFER_SIZE 1024
 #define MAX_MSGS 5
 
-int PORT = 5000;
+int PORT = 6969;
 char *IP = "127.0.0.1";
 
 void* client_thread(void *arg) {

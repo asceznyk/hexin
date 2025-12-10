@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <errno.h>
 
 #include "defs.h"
 #include "utils.h"
 #include "client.h"
+#include "http_response.h"
 
 void append_to_state(
   struct client_state *state,
@@ -41,18 +43,15 @@ void *handle_client(void *arg) {
   char tmp_buf[BUFFER_SIZE];
   while(true) {
     ssize_t bytes_read = recv(client_fd, tmp_buf, BUFFER_SIZE, 0);
-    if (bytes_read <= 0) continue;
+    if (bytes_read == 0) break;
+    if (bytes_read < 0) {
+      if(errno == EINTR) continue;
+      break;
+    }
     print_escaped(tmp_buf, bytes_read);
     append_to_state(state, tmp_buf, bytes_read);
-    process_request(state);
-    const char *response =
-      "HTTP/1.1 200 OK\r\n"
-      "Content-Length: 6\r\n"
-      "Content-Type: text/plain\r\n"
-      "Connection: keep-alive\r\n"
-      "\r\n"
-      "Hello\n";
     if (ends_with_double_crlf(state->buffer, state->buf_len)) {
+      char *response = http_response(state);
       send(client_fd, response, strlen(response), 0);
       check_and_empty_state(state);
     }

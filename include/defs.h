@@ -7,11 +7,5 @@
 
 #define STATIC_LOCATION "/var/www/html"
 
-struct client_state {
-  int fd;
-  char buffer[BUFFER_SIZE];
-  ssize_t buf_len;
-};
-
 #endif
 

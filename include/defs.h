@@ -7,5 +7,7 @@
 
 #define STATIC_LOCATION "/var/www/html"
 
+#define PROXY_PASS ""
+
 #endif
 

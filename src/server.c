@@ -50,7 +50,7 @@ int main() {
     socklen_t len = sizeof(client_addr);
     int client_fd;
     if((
-      client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &len)
+      client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &len)
     ) < 0) {
       perror("cound't accept connection request!");
       continue;

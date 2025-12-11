@@ -1,8 +1,3 @@
-#include <stdlib.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <errno.h>
-
 #include "defs.h"
 #include "utils.h"
 #include "client.h"

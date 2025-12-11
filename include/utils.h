@@ -1,27 +1,17 @@
-#include <stdio.h>
+#ifndef UTILS_H
+#define UTILS_H
+
+#include <ctype.h>
 #include <string.h>
+#include <stddef.h>
 
-int ends_with_double_crlf(const char *buf, size_t len) {
-  if (len < 4) return 0;
-  return buf[len-4] == '\r' &&
-  buf[len-3] == '\n' &&
-  buf[len-2] == '\r' &&
-  buf[len-1] == '\n';
-}
+char *skip_leading_ws(char *buffer);
 
-void print_escaped(const char *buf, ssize_t n) {
-  if(n) printf("print_escaped: \t");
-  for (ssize_t i = 0; i < n; i++) {
-    unsigned char c = buf[i];
-    if (c == '\r') printf("\\r");
-    else if (c == '\n') printf("\\n");
-    else if (c == '\t') printf("\\t");
-    else if (c < 32 || c > 126)
-      printf("\\x%02X", c);
-    else
-      printf("%c", c);
-  }
-  printf("\n");
-}
+int ends_with_double_crlf(const char *buf, size_t len);
 
+void print_escaped(const char *buf, ssize_t n);
+
+char *str_concat(char* a, char* b);
+
+#endif
 

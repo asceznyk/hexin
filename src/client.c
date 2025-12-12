@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "defs.h"
 #include "utils.h"
 #include "client.h"
@@ -46,12 +48,12 @@ void *handle_client(void *arg) {
     print_escaped(tmp_buf, bytes_read);
     append_to_state(state, tmp_buf, bytes_read);
     if (ends_with_double_crlf(state->buffer, state->buf_len)) {
-      char *response = http_response(state);
-      send(client_fd, response, strlen(response), 0);
+      http_response(state);
       check_and_empty_state(state);
     }
   }
   free(state);
   close(client_fd);
   printf("connection closed!\n");
+  return NULL;
 }

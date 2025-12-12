@@ -5,7 +5,7 @@
 
 extern char *response_not_found;
 
-char *http_response(struct client_state *state);
+void http_response(struct client_state *state);
 
 #endif
 

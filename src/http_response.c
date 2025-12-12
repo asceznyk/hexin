@@ -4,7 +4,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-
 #include "client.h"
 #include "utils.h"
 #include "http_response.h"

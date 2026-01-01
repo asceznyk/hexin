@@ -46,13 +46,13 @@ const char *get_file_extension(char *loc) {
 }
 
 const char *get_mime_type(const char *ext) {
-  if (strcasecmp(ext, "html") || strcasecmp(ext, "htm")) {
+  if (!strcasecmp(ext, "html") || !strcasecmp(ext, "htm")) {
     return "text/html";
-  } else if (strcasecmp(ext, "jpeg") || strcasecmp(ext, "jpg")) {
+  } else if (!strcasecmp(ext, "jpeg") || !strcasecmp(ext, "jpg")) {
     return "image/jpeg";
-  } else if (strcasecmp(ext, "txt")) {
+  } else if (!strcasecmp(ext, "txt")) {
     return "text/plain";
-  } else if (strcasecmp(ext, "png")) {
+  } else if (!strcasecmp(ext, "png")) {
     return "image/png";
   } else {
     return "application/octet-stream";

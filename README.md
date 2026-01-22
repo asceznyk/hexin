@@ -1,5 +1,5 @@
 # hexin
 
-A HTTP server written in C for maintaining sanity with recreational programming.
+A multi-threaded, HTTP static-file server written in C for recreational programming.
 
 

@@ -100,21 +100,20 @@ void stream_http_response(char *rpath, int client_fd, int file_fd) {
 }
 
 void http_response(struct client_state *state) {
-  if(state->buf_len <= 0) return;
+  if (state->buf_len <= 0) return;
   int client_fd = state->fd;
   char *method = get_http_method(state->buffer);
-  if (strcmp(method, "GET")) {
-    return; //TODO proxy/HEAD, parse other methods!
-  }
-  if (strcmp(STATIC_LOCATION, "")) {
-    char *path = get_file_path_url(state->buffer, method);
-    int file_fd = static_resolve_path(path);
-    stream_http_response(path, client_fd, file_fd);
-    free(path);
+  if (strcmp(method, "GET") != 0) return;
+  if (!strcmp(STATIC_LOCATION, "")) {
+    send(client_fd, not_found, strlen(not_found), 0);
+    free(method);
     return;
   }
+  char *path = get_file_path_url(state->buffer, method);
+  int file_fd = static_resolve_path(path);
+  stream_http_response(path, client_fd, file_fd);
+  free(path);
   free(method);
-  send(client_fd, not_found, strlen(not_found), 0);
 }
 
 
